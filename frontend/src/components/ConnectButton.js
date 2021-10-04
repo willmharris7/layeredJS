@@ -13,7 +13,16 @@ function ConnectButton() {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        alert(data)
+        console.log("Definition of data is: " + data)
+        const response = await fetch('/api/world', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({post: data})
+          });
+          const body = await response.text();
+          console.log(body)
     }
 
     return(
