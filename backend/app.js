@@ -17,10 +17,10 @@
 // Express demo server // 
 const express = require("express");
 const app = express();
-  
-// app.get("/", (req, res) => {
-//    res.send("Hello World!!!!");
-// });
+
+app.get('/api/hello', (req, res) => {
+  res.send({ express: 'Hello From Express' });
+});
 
 app.post("/post", (req, res) => {
   console.log("Connected to React");
