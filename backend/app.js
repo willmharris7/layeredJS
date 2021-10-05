@@ -31,6 +31,10 @@ async function listDatabases(client){
   databasesList.databases.forEach(db => databaseNamesList.push(db.name))
   return databaseNamesList
 };
+
+async function getTop5(client) {
+  return "test"
+}
 // App //
 app.use(express.json()); // replaces bodyParser.json()
 app.get('/api/hello', (req, res) => {
@@ -41,6 +45,11 @@ app.get('/api/dbs', async function (req, res) {
   dbNames = await listDatabases(client)
   res.send({ express: dbNames });
 });
+app.get('/api/top5', async function (req, res) {
+  await client.connect()
+  top5Listings = await getTop5(client)
+  res.send({ express: top5Listings });
+});
 app.post('/api/world', (req, res) => {
   res.send(
     `I received your POST request. This is what you sent me: ${req.body.post}`,
@@ -48,6 +57,8 @@ app.post('/api/world', (req, res) => {
 });
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
+
+// Logic to be discarded 
 
 async function main() {
 

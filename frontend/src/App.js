@@ -8,6 +8,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <GetDatabasesButton/>
+        <Top5ListingsButton/>
         <ConnectButton/>
         <Counter/>
       </header>
