@@ -8,7 +8,6 @@ function GetDatabasesButton() {
         <li>{name}</li>
     )
 
-
     async function getDbNamesList() {
         const response = await fetch("/api/dbs")
         const body = await response.json()
