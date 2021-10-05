@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 function GetDatabasesButton() {
 
     const [dbNamesList, setDbNamesList] = useState([])
-    const numbers = [1, 2, 3, 4, 5];
-    let dbNamesListItems = numbers.map((number) =>
-        <li>{number}</li>
+     
+    let dbNamesListItems = dbNamesList.map((name) =>
+        <li>{name}</li>
     )
 
 
