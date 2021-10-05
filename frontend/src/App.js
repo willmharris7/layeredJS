@@ -1,6 +1,5 @@
 import './App.css';
-import ConnectButton from './components/ConnectButton'
-import Counter from './components/Counter'
+import SearchForm from './components/SearchForm'
 import GetDatabasesButton from './components/GetDatabasesButton';
 import Top5ListingsButton from './components/Top5ListingsButton';
 
@@ -10,8 +9,7 @@ function App() {
       <header className="App-header">
         <GetDatabasesButton/>
         <Top5ListingsButton/>
-        <ConnectButton/>
-        <Counter/>
+        <SearchForm/>
       </header>
     </div>
   );
