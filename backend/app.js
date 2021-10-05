@@ -14,34 +14,34 @@
 //   console.log(`Server running at http://${hostname}:${port}/`);
 // });
 
-// Express demo server // 
+// Imports // 
 const express = require("express");
+const {MongoClient} = require('mongodb');
+// Definitions //
 const app = express();
-
+const PORT = process.env.PORT || 8080;
+const uri = "mongodb+srv://first_test_user:im7p9hcVdHo5aS@cluster0.1m63c.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri);
+// Helper functions //
+// App //
 app.use(express.json()); // replaces bodyParser.json()
-
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
 });
-
 app.post('/api/world', (req, res) => {
   res.send(
     `I received your POST request. This is what you sent me: ${req.body.post}`,
   );
 });
-  
-const PORT = process.env.PORT || 8080;
-  
+
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
 // run with 
   // npm run dev 
 
 // Database //
-// const {MongoClient} = require('mongodb');
+
 
 // async function main() {
-//   const uri = "mongodb+srv://first_test_user:im7p9hcVdHo5aS@cluster0.1m63c.mongodb.net/test?retryWrites=true&w=majority";
-//   const client = new MongoClient(uri);
 
 //   async function listDatabases(client){
 //     databasesList = await client.db().admin().listDatabases();
