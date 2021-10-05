@@ -23,6 +23,14 @@ const PORT = process.env.PORT || 8080;
 const uri = "mongodb+srv://first_test_user:im7p9hcVdHo5aS@cluster0.1m63c.mongodb.net/test?retryWrites=true&w=majority";
 const client = new MongoClient(uri);
 // Helper functions //
+async function listDatabases(client){
+  databasesList = await client.db().admin().listDatabases();
+  // console.log("Databases:");
+  // databasesList.databases.forEach(db => console.log(` - ${db.name}`));
+  databaseNamesList = []
+  databasesList.databases.forEach(db => databaseNamesList.push(db.name))
+  return databaseNamesList
+};
 // App //
 app.use(express.json()); // replaces bodyParser.json()
 app.get('/api/hello', (req, res) => {
@@ -30,7 +38,8 @@ app.get('/api/hello', (req, res) => {
 });
 app.get('/api/dbs', async function (req, res) {
   await client.connect()
-  res.send({ express: 'Hello From Database!!!!!!' });
+  dbNames = await listDatabases(client)
+  res.send({ express: dbNames });
 });
 app.post('/api/world', (req, res) => {
   res.send(
@@ -41,13 +50,6 @@ app.post('/api/world', (req, res) => {
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
 
 async function main() {
-
-  async function listDatabases(client){
-    databasesList = await client.db().admin().listDatabases();
- 
-    console.log("Databases:");
-    databasesList.databases.forEach(db => console.log(` - ${db.name}`));
-  };
 
   async function findListings(client, resultsLimit) {
     const cursor = client
