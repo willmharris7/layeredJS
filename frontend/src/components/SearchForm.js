@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 function SearchForm() {
 
     const [data, setData] = useState("")
+    const [serverResp, setServerResp] = useState("")
     
     async function handleSubmit(e) {
         e.preventDefault()
-        console.log("Definition of data is: " + data)
         const response = await fetch('/api/world', {
             method: 'POST',
             headers: {
@@ -14,8 +14,8 @@ function SearchForm() {
             },
             body: JSON.stringify({post: data})
           });
-          const body = await response.text();
-          console.log(body)
+        const body = await response.text();
+        setServerResp(body)
     }
 
     return(
@@ -24,6 +24,7 @@ function SearchForm() {
                 <input type="text" onChange={e => setData(e.target.value)}/>
                 <button type="submit">Submit</button>
             </form>
+            <div>{serverResp}</div>
         </div>
     )
 }

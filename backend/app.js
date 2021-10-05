@@ -72,7 +72,7 @@ app.get('/api/top5', async function (req, res) {
 app.post('/api/world', (req, res) => {
   console.log(req.body)
   res.send(
-    `I received your POST request. This is what you sent me: ${req.body["foo"]}`,
+    `I received your POST request. This is what you sent me: ${req.body["post"]}`,
   );
 });
 
