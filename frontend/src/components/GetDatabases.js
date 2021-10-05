@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function GetDatabasesButton() {
+function GetDatabases() {
 
     const [dbNamesList, setDbNamesList] = useState([])
      
@@ -23,4 +23,4 @@ function GetDatabasesButton() {
     )
 }
 
-export default GetDatabasesButton
+export default GetDatabases

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-function SearchForm() {
+function SearchBedrooms() {
 
     const [data, setData] = useState("")
     const [bedroomsList, setBedroomsList] = useState([])
@@ -34,4 +34,4 @@ function SearchForm() {
     )
 }
 
-export default SearchForm
+export default SearchBedrooms
