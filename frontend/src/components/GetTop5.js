@@ -1,22 +1,23 @@
 import React, { useState } from 'react'
 
 function GetTop5() {
-    const [top5List, setTop5List] = useState([])
+    
+    const [top5Names, setTop5Names] = useState([])
 
-    let top5ListItems = top5List.map((listing) =>
-        <li>{listing}</li>
+    let top5List = top5Names.map(name =>
+        <li>{name}</li>
     )
 
-    async function getTop5s() {
-        const response = await fetch("/api/top5")
-        const body = await response.json()
-        setTop5List(body["express"])
+    async function getTop5Names() {
+        const backendResp = await fetch("/api/top5")
+        const body = await backendResp.json()
+        setTop5Names(body["express"])
     }
 
     return(
         <div>
-            <button onClick={getTop5s}>Get 5 AirBnB listings</button>
-            <ul>{top5ListItems}</ul>
+            <button onClick={getTop5Names}>Get 5 AirBnB listings</button>
+            <ul>{top5List}</ul>
         </div>
     )
 }

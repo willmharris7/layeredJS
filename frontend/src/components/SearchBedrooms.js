@@ -2,34 +2,34 @@ import React, { useState } from 'react'
 
 function SearchBedrooms() {
 
-    const [data, setData] = useState("")
-    const [bedroomsList, setBedroomsList] = useState([])
+    const [formInput, setFormInput] = useState("")
+    const [bedroomNames, setBedroomNames] = useState([])
 
-    let bedroomsListItems = bedroomsList.map((listing) => 
-        <li>{listing}</li>
+    let bedroomList = bedroomNames.map(name => 
+        <li>{name}</li>
     )
     
     async function handleSubmit(e) {
         e.preventDefault()
-        const response = await fetch('/api/bedrooms', {
+        const backendResp = await fetch('/api/bedrooms', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({post: data})
-          });
-        const body = await response.json()
-        console.log(body)
-        setBedroomsList(body["express"])
+            body: JSON.stringify({post: formInput})
+        })
+        const body = await backendResp.json()
+        setBedroomNames(body["express"])
     }
 
     return(
         <div>
+            <span> Select number of bedrooms </span>
             <form onSubmit={handleSubmit}>
-                <input type="number" onChange={e => setData(e.target.value)}/>
+                <input type="number" onChange={e => setFormInput(e.target.value)}/>
                 <button type="submit">Submit</button>
             </form>
-            <ul>{bedroomsListItems}</ul>
+            <ul>{bedroomList}</ul>
         </div>
     )
 }

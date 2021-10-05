@@ -2,24 +2,23 @@ import React, { useState } from 'react'
 
 function GetDatabases() {
 
-    const [dbNamesList, setDbNamesList] = useState([])
+    const [dbNames, setDbNames] = useState([])
      
-    let dbNamesListItems = dbNamesList.map((name) =>
+    let dbList = dbNames.map(name =>
         <li>{name}</li>
     )
 
-    async function getDbNamesList() {
-        const response = await fetch("/api/dbs")
-        const body = await response.json()
-        setDbNamesList(body["express"])
+    async function getDbNames() {
+        const backendResp = await fetch("/api/dbs")
+        const body = await backendResp.json()
+        setDbNames(body["express"])
     }
 
     return(
         <div>
-            <button onClick={getDbNamesList}>Get database list</button>
-            <ul>{dbNamesListItems}</ul>
+            <button onClick={getDbNames}>Get database list</button>
+            <ul>{dbList}</ul>
         </div>
-        
     )
 }
 
