@@ -5,7 +5,10 @@ function GetDatabasesButton() {
     const [dbNamesList, setDbNamesList] = useState("")
 
     async function getDbNamesList() {
-        alert("working")
+        const response = await fetch("/api/dbs")
+        const body = await response.json()
+        let bodyString = body["express"].toString()
+        setDbNamesList(bodyString)
     }
 
     return(
