@@ -1,86 +1,53 @@
-const express = require("express");
-const {MongoClient} = require('mongodb');
-const app = express();
-const PORT = process.env.PORT || 8080;
-const uri = "mongodb+srv://first_test_user:im7p9hcVdHo5aS@cluster0.1m63c.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
-
-// Helper functions //
-async function listDatabases(client){
-  await client.connect()
-  databasesList = await client.db().admin().listDatabases();
-  databaseNamesList = []
-  databasesList.databases.forEach(db => databaseNamesList.push(db.name))
-  await client.close()
-  return databaseNamesList
-};
-
-async function getTop5(client) {
-  await client.connect()
-  const cursor = client
-      .db('sample_airbnb')
-      .collection('listingsAndReviews')
-      .find()
-      .limit(5);
-  fatResult = await cursor.toArray();
-  skinnyResult = []
-  for (const listing of fatResult) {
-    skinnyResult.push(listing.name + " has " + listing.bedrooms + " bedrooms")
-  }
-  await client.close()
-  return skinnyResult
-  
-}
-
-async function getBedrooms(req) {
-  await client.connect()
-  const cursor = client
-      .db('sample_airbnb')
-      .collection('listingsAndReviews')
-      .find({"bedrooms": req})
-      .limit(5);
-  fatResult = await cursor.toArray();
-  skinnyResult = []
-  for (const listing of fatResult) {
-    skinnyResult.push(listing.name + " has " + listing.bedrooms + " bedrooms")
-  }
-  await client.close()
-  return skinnyResult
-}
-// Helper functions //
-
-// App //
-app.use(express.json()); // replaces bodyParser.json()
+const express = require("express")
+const {MongoClient} = require('mongodb')
+const app = express()
+const PORT = process.env.PORT || 8080
+const uri = "mongodb+srv://first_test_user:im7p9hcVdHo5aS@cluster0.1m63c.mongodb.net/test?retryWrites=true&w=majority"
+const client = new MongoClient(uri)
+app.use(express.json()) // replaces bodyParser.json()
 app.use(express.urlencoded({extended: true})) // for Postman: use x-www-form-urlencoded to post 
+app.listen(PORT, console.log(`Server started on port ${PORT}`))
 
+// Test endpoints //
 app.get('/api/hello', (req, res) => {
-  res.send({ express: 'Hello From Express' });
-});
+  res.send({ express: 'Hello From Express' })
+})
+
+app.post('/api/world', (req, res) => {
+  res.send(`I received your POST request. This is what you sent me: ${Object.values(req.body)[0]}`)
+})
+// Test endpoints //
 
 app.get('/api/dbs', async function (req, res) {
   await client.connect()
-  dbNames = await listDatabases(client)
-  res.send({ express: dbNames });
-});
+  dbList = await client.db().admin().listDatabases()
+  dbNames = []
+  dbList.databases.forEach(db => dbNames.push(db.name))
+  await client.close()
+  res.send({ express: dbNames })
+})
 
 app.get('/api/top5', async function (req, res) {
   await client.connect()
-  top5Listings = await getTop5(client)
-  res.send({ express: top5Listings })
-});
-
-app.post('/api/world', (req, res) => {
-  console.log(req.body)
-  res.send(
-    `I received your POST request. This is what you sent me: ${req.body["post"]}`,
-  );
-});
+  const dbResp = client.db('sample_airbnb').collection('listingsAndReviews').find().limit(5)
+  top5Listings = await dbResp.toArray()
+  top5ListingsNamesBedrooms = []
+  for (const listing of top5Listings) {
+    top5ListingsNamesBedrooms.push(listing.name + " has " + listing.bedrooms + " bedrooms")
+  }
+  await client.close()
+  res.send({ express: top5ListingsNamesBedrooms })
+})
 
 app.post('/api/bedrooms', async function (req, res) {
-  let number = parseInt(Object.values(req.body)[0])
-  bedroomsList = await getBedrooms(number)
-  res.send({ express: bedroomsList })
-});
-
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
-// App // 
+  const number = parseInt(Object.values(req.body)[0])
+  await client.connect()
+  const dbResp = client.db('sample_airbnb').collection('listingsAndReviews').find({"bedrooms": number}).limit(5)
+  top5Listings = await dbResp.toArray()
+  top5ListingsNamesBedrooms = []
+  for (const listing of top5Listings) {
+    top5ListingsNamesBedrooms.push(listing.name + " has " + listing.bedrooms + " bedrooms")
+  }
+  await client.close()
+  res.send({ express: top5ListingsNamesBedrooms })
+})
