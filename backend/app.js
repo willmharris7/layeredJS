@@ -34,8 +34,18 @@ async function getTop5(client) {
 
 async function getBedrooms(req) {
   await client.connect()
+  const cursor = client
+      .db('sample_airbnb')
+      .collection('listingsAndReviews')
+      .find({"bedrooms": req})
+      .limit(5);
+  fatResult = await cursor.toArray();
+  skinnyResult = []
+  for (const listing of fatResult) {
+    skinnyResult.push(listing.name + " has " + listing.bedrooms + " bedrooms")
+  }
   await client.close()
-  return "working A"
+  return skinnyResult
 }
 // Helper functions //
 
@@ -56,7 +66,7 @@ app.get('/api/dbs', async function (req, res) {
 app.get('/api/top5', async function (req, res) {
   await client.connect()
   top5Listings = await getTop5(client)
-  res.send({ express: top5Listings });
+  res.send({ express: top5Listings })
 });
 
 app.post('/api/world', (req, res) => {
@@ -67,10 +77,9 @@ app.post('/api/world', (req, res) => {
 });
 
 app.post('/api/bedrooms', async function (req, res) {
-  result = await getBedrooms(req)
-  res.send(
-    result
-  );
+  let number = parseInt(Object.values(req.body)[0])
+  bedroomsList = await getBedrooms(number)
+  res.send({ express: bedroomsList })
 });
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
