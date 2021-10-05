@@ -25,15 +25,24 @@ const client = new MongoClient(uri);
 // Helper functions //
 async function listDatabases(client){
   databasesList = await client.db().admin().listDatabases();
-  // console.log("Databases:");
-  // databasesList.databases.forEach(db => console.log(` - ${db.name}`));
   databaseNamesList = []
   databasesList.databases.forEach(db => databaseNamesList.push(db.name))
   return databaseNamesList
 };
 
 async function getTop5(client) {
-  return "test"
+  const cursor = client
+      .db('sample_airbnb')
+      .collection('listingsAndReviews')
+      .find()
+      .limit(5);
+  fatResult = await cursor.toArray();
+  skinnyResult = []
+  for (const listing of fatResult) {
+    skinnyResult.push(listing.name + " has " + listing.bedrooms + " bedrooms")
+  }
+  return skinnyResult
+  
 }
 // App //
 app.use(express.json()); // replaces bodyParser.json()
@@ -68,7 +77,6 @@ async function main() {
       .collection('listingsAndReviews')
       .find()
       .limit(resultsLimit);
-  
     const results = await cursor.toArray();
     if (results.length > 0) {
       console.log(`Found ${results.length} listing(s):`);
@@ -91,7 +99,6 @@ async function main() {
  
   try {
     // await client.connect();
-    // await listDatabases(client);
     // await findListings(client, 5);
   } catch (e) {
       console.error(e);
