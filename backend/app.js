@@ -27,14 +27,21 @@ async function getTop5(client) {
   for (const listing of fatResult) {
     skinnyResult.push(listing.name + " has " + listing.bedrooms + " bedrooms")
   }
-  await  client.close()
+  await client.close()
   return skinnyResult
   
+}
+
+async function getBedrooms(req) {
+  await client.connect()
+  await client.close()
+  return "working A"
 }
 // Helper functions //
 
 // App //
 app.use(express.json()); // replaces bodyParser.json()
+app.use(express.urlencoded({extended: true})) // for Postman: use x-www-form-urlencoded to post 
 
 app.get('/api/hello', (req, res) => {
   res.send({ express: 'Hello From Express' });
@@ -53,8 +60,16 @@ app.get('/api/top5', async function (req, res) {
 });
 
 app.post('/api/world', (req, res) => {
+  console.log(req.body)
   res.send(
-    `I received your POST request. This is what you sent me: ${req.body.post}`,
+    `I received your POST request. This is what you sent me: ${req.body["foo"]}`,
+  );
+});
+
+app.post('/api/bedrooms', async function (req, res) {
+  result = await getBedrooms(req)
+  res.send(
+    result
   );
 });
 
